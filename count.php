@@ -9,7 +9,7 @@ $ep = (!empty($_REQUEST['ep']))?$_REQUEST['ep']:file_get_contents("./conf/solr_e
 
 $ep = trim($ep, " /\r\n");
 
-$query_url = $ep . "/select?q=*:*&rows=0&wt=json&facet=true&facet.field=source";
+$query_url = $ep . "/select?q=*:*&rows=0&wt=json&facet=true&facet.field=source&fq=-source:taicol_2";
 $f_jo = json_decode(file_get_contents($query_url));
 $fieldCounts = array();
 foreach ($f_jo->facet_counts->facet_fields->source as $idx => $fieldCount) {

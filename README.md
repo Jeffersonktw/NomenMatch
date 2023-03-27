@@ -28,7 +28,7 @@ Install by docker-compose
   $ docker-compose exec solr bash
   $ ./bin/solr create_core -c taxa
   $ cp solrconfig.xml /var/solr/data/taxa/conf
-  $ cp schema.xml /var/solr/data/taxa/conf
+  $ cp managed-schema /var/solr/data/taxa/conf
 ```
 
 4) prepare data
