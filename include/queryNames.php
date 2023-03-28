@@ -276,7 +276,7 @@ function extract_results ($query_url="", $msg="", $reset=false, $against="") {
 					'matched_clean' => $doc->canonical_name,
 					'accepted_namecode' => array(@$doc->accepted_namecode),
 					'namecode' => array(@$doc->namecode),
-					'source' => array(array_shift(explode("-", $doc->id))),
+					'source' => array(@$doc->source),
 					'url_id' => array(@$doc->url_id),
 					'a_url_id' => array(@$doc->a_url_id),
 					'kingdom' => array(@$doc->kingdom),
@@ -291,7 +291,7 @@ function extract_results ($query_url="", $msg="", $reset=false, $against="") {
 			else {
 				if (!in_array(@$doc->namecode, $all_matched[$doc->canonical_name]['namecode'])) {
 					$all_matched[$doc->canonical_name]['namecode'][] = @$doc->namecode;
-					$all_matched[$doc->canonical_name]['source'][] = array_shift(explode("-", $doc->id));
+					$all_matched[$doc->canonical_name]['source'][] = @$doc->source;
 					$all_matched[$doc->canonical_name]['accepted_namecode'][] = @$doc->accepted_namecode;
 					$all_matched[$doc->canonical_name]['url_id'][] = @$doc->url_id;
 					$all_matched[$doc->canonical_name]['a_url_id'][] = @$doc->a_url_id;
