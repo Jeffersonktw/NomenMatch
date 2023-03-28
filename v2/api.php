@@ -46,6 +46,11 @@ if (!empty($_REQUEST['source'])){
 	$against = (!empty($_POST['source']))?$_POST['source']:'';
 }
 
+if ($against=='taicol'){
+	$against = 'taicol_2';
+}
+
+
 // $best = (!empty($_REQUEST['best']))?$_REQUEST['best']:'yes';
 if (!empty($_REQUEST['best'])){
 	$best = $_REQUEST['best'];
@@ -784,7 +789,7 @@ function render_json ($data, $time, $best, $against, $next_page, $previous_page,
 						$tmp[$c] = str_replace('taicol_2','taicol',$dsub[$c][$k]);
 					} else {
 						$tmp[$c] = $dsub[$c][$k];
-					}				
+					}
 				}
 
 				$current_source_index = 0;
@@ -803,6 +808,10 @@ function render_json ($data, $time, $best, $against, $next_page, $previous_page,
 	}
 
 	//print_r($test);
+
+	if ($against=='taicol_2') {
+		$against = 'taicol';
+	}
 
 	echo json_encode(array(
 		'query' => array(
