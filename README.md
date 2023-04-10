@@ -89,6 +89,9 @@ Column definition:
 - simple_name
 - name_status
 
+> **Note**
+> example code for generating source data could be found in `./scripts` folder.
+
 # Describe source data
 
 Edit conf/sources.example.csv and rename to sources.csv  
@@ -101,8 +104,8 @@ for example,
 - source data page
 - date (of source data fetched, downloaded, or created)
 
-Delete source data in solr
------
+# Delete source data in solr
+
 Under v2/workspace dir, run  
 ```
 php clean_source.php {source_id}
