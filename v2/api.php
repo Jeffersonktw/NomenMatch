@@ -518,8 +518,8 @@ function render_table ($data, $time, $hardcsv=false, $next_page, $previous_page,
 	// $prev_score = -100;
 	unset($columns[0]); // score
 	unset($columns[1]); // name
-	unset($columns[2]); // matched_clean
-	unset($columns[16]); // type
+	unset($columns[3]); // matched_clean
+	unset($columns[15]); // type
 	unset($columns[17]); // id
 	// 內文
 	foreach ($data as $nidx => $name_d) {
@@ -582,12 +582,18 @@ function render_table ($data, $time, $hardcsv=false, $next_page, $previous_page,
 			echo $d['name']."</td>";
 			echo "<td rowspan='".$rowspan."'>".$d['matched_clean']."</td>";
 			foreach ($columns as $c) {
-				if (($c == 'matched' && !preg_match("/\p{Han}+/u", $d['name']))|| ($c == 'common_name' && preg_match("/\p{Han}+/u", $d['name']))){
-					echo "<td class='matched'>".$d[$c][0]."</td>";
-				} else if ($c == 'source'){
-					echo "<td>".str_replace('taicol_2','taicol',$d[$c][0])."</td>";
-				}  else {
-					echo "<td>".$d[$c][0]."</td>";
+				if (($c == 'matched' && !preg_match("/\p{Han}+/u", $d['name'])) || ($c == 'common_name' && preg_match("/\p{Han}+/u", $d['name']))){
+					if (!$d[$c]) {
+						echo "<td class='matched'></td>";
+					} else {
+						echo "<td class='matched'>".$d[$c][0]."</td>";
+					}
+				} else {
+					if (!$d[$c]) {
+						echo "<td></td>";
+					} else {
+						echo "<td>".$d[$c][0]."</td>";
+					}
 				}
 			}
 
@@ -711,25 +717,48 @@ function render_csv ($data) {
 			$source_count_values = array_count_values($source_for_type);
 
 			$tmp_keys = array_keys($dsub['matched']);
-			foreach($tmp_keys as $k){
+			if ($tmp_keys){
+				foreach($tmp_keys as $k){
+					$tmp = array();
+					$tmp['score'] = $dsub['score'];
+					$tmp['search_term'] = $dsub['name'];
+					$tmp['matched_clean'] = $dsub['matched_clean'];
+					foreach($columns as $c){
+						if ($c == 'source'){
+							$tmp[$c] = str_replace('taicol_2','taicol',$dsub[$c][$k]);
+						} else {
+							$tmp[$c] = $dsub[$c][$k];
+						}
+					}
+
+					$current_source_index = 0;
+
+					if ($k == $source_count_values[$source_for_type[$current_source_index]]){
+						$current_source_index += 1;
+					}
+					$tmp['match_type'] = $types[$current_source_index];
+					array_push($results, $tmp);
+				}
+			} else {
 				$tmp = array();
 				$tmp['score'] = $dsub['score'];
 				$tmp['search_term'] = $dsub['name'];
 				$tmp['matched_clean'] = $dsub['matched_clean'];
-				foreach($columns as $c){
-					if ($c == 'source'){
-						$tmp[$c] = str_replace('taicol_2','taicol',$dsub[$c][$k]);
-					} else {
-						$tmp[$c] = $dsub[$c][$k];
-					}
-				}
-
-				$current_source_index = 0;
-
-				if ($k == $source_count_values[$source_for_type[$current_source_index]]){
-					$current_source_index += 1;
-				}
-				$tmp['match_type'] = $types[$current_source_index];
+				$tmp['matched'] = '';
+				$tmp['simple_name'] = '';
+				$tmp['common_name'] = '';
+				$tmp['accepted_namecode'] = '';
+				$tmp['namecode'] = '';
+				$tmp['name_status'] = '';
+				$tmp['source'] = '';
+				$tmp['kingdom'] = '';
+				$tmp['phylum'] = ''; 
+				$tmp['class'] = '';
+				$tmp['order'] = '';
+				$tmp['family'] = '';
+				$tmp['genus'] = '';
+				$tmp['taxon_rank'] = '';
+				$tmp['match_type'] = $dsub['type'];
 				array_push($results, $tmp);
 			}
 		}
